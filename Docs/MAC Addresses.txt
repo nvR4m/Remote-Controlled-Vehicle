@@ -1,0 +1,2 @@
+RECEIVER: 3c:8a:1f:d3:3f:40
+TRANSMITER: 7c:9e:bd:70:00:70
