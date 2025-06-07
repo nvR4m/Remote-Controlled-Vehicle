@@ -7,7 +7,8 @@
 unsigned long lastBlink = 0;
 bool blinkOn = false;
 
-void setup() {
+void setup() 
+{
     /* Configure I2C */
     Wire.begin(21, 22);  
 
@@ -22,7 +23,8 @@ void setup() {
     delay(500);
 }
 
-void loop() {
+void loop() 
+{
     /* Call gyro IC and get relevant data */  
     gyroUpdate();
     int16_t roll = gyroGetRollPct();
@@ -30,12 +32,15 @@ void loop() {
 
     /* Send gyro data via ESP-NOW */
     bool sent = sendGyroData(roll, pitch);
-    if (!sent) {
+
+    if (!sent) 
+    {
         Serial.println("Failed to send gyro data");
     }
 
     /* Blink toggle every 500ms */
-    if (millis() - lastBlink > 500) {
+    if (millis() - lastBlink > 500) 
+    {
         lastBlink = millis();
         blinkOn = !blinkOn;
     }

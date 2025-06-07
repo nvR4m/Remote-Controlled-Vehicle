@@ -3,16 +3,18 @@
 #include <math.h>
 
 /* Initialize gyro IC */
-void gyroSetup(void) {
+void gyroSetup(void) 
+{
     Wire.beginTransmission(MPU_ADDR);
-    Wire.write(0x6B);  // Power management register
-    Wire.write(0x00);  // Wake up device
+    Wire.write(0x6B);  
+    Wire.write(0x00); 
     Wire.endTransmission();
     delay(100);
 }
 
 /* Read 2 bytes from register */
-static int16_t readMPURegister16(uint8_t reg) {
+static int16_t readMPURegister16(uint8_t reg) 
+{
     Wire.beginTransmission(MPU_ADDR);
     Wire.write(reg);
     Wire.endTransmission(false);
@@ -21,7 +23,8 @@ static int16_t readMPURegister16(uint8_t reg) {
 }
 
 /* Read data */
-void gyroUpdate(void) {
+void gyroUpdate(void) 
+{
     /* Read raw data */
     int16_t ax = readMPURegister16(0x3B);
     int16_t ay = readMPURegister16(0x3D);
@@ -51,6 +54,7 @@ void gyroUpdate(void) {
     {
         rollPct = 0;
     }
+    
     if(pitch >= -20 && pitch <= 20)
     {
         pitchPct = 0;
@@ -58,14 +62,16 @@ void gyroUpdate(void) {
 }
 
 /* Getter for roll percentage */
-int16_t gyroGetRollPct(void) {
+int16_t gyroGetRollPct(void) 
+{
     if(rollPct > 100) rollPct = 100;
     else if(rollPct < -100) rollPct = -100;
     return rollPct;
 }
 
 /* Getter for pitch percentage */
-int16_t gyroGetPitchPct(void) {
+int16_t gyroGetPitchPct(void) 
+{
     if(pitchPct > 100) pitchPct = 100;
     else if(pitchPct < -100) pitchPct = -100;
     return pitchPct;
