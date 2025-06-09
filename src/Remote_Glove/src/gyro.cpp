@@ -22,7 +22,6 @@ static int16_t readMPURegister16(uint8_t reg)
     return (Wire.read() << 8) | Wire.read();
 }
 
-/* Read data */
 void gyroUpdate(void) 
 {
     /* Read raw data */
@@ -47,18 +46,11 @@ void gyroUpdate(void)
 
     /* Convert to percentage values */
     rollPct  = (int16_t)(roll  / 90.0f * 100.0f) * (roll < 0 ? 2.7f : 1.8f);
-
     pitchPct = (int16_t)((pitch / 90.0f * 100.0f) * (pitch < 0 ? 1.5f : 2.2f));
 
-    if(roll >= -20 && roll <= 20)
-    {
-        rollPct = 0;
-    }
-    
-    if(pitch >= -20 && pitch <= 20)
-    {
-        pitchPct = 0;
-    }
+    /* Limit roll and pitch values */
+    if(roll >= -20 && roll <= 20){ rollPct = 0;}
+    if(pitch >= -20 && pitch <= 20){ pitchPct = 0;}
 }
 
 /* Getter for roll percentage */
