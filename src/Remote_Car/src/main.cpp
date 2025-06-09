@@ -49,8 +49,7 @@ void loop() {
         else if (pitch <= -40) newState = STATE_T2_LEFT;
         else if (roll >= 40)   newState = STATE_T2_BACK;
         else if (roll <= -40 && !frontLocked)  newState = STATE_T2_FRONT;
-
-        else                   newState = STATE_HALT;
+        else newState = STATE_HALT;
 
     }
 
