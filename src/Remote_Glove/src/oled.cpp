@@ -11,7 +11,6 @@ void oledSetup()
         delay(1000);
         esp_restart();
     }
-
     display.clearDisplay();
     display.setTextColor(SSD1306_WHITE);
     display.setTextSize(1);
@@ -23,25 +22,25 @@ void oledSetup()
 /* Display gyro values with transmission status and blinking */
 void oledShowInclination(int rollPct, int pitchPct, TxStatus txStatus, bool blinkOn) 
 {
+    /* Display inclination agles */
     display.clearDisplay();
     display.setCursor(0, 0);
     display.setTextSize(1);
     display.println("Inclination:");
     display.print("Roll : "); display.print(rollPct); display.println(" %");
     display.print("Pitch: "); display.print(pitchPct); display.println(" %");
+    display.setCursor(0, 40);  
 
-    // Transmission status line (line 5 or so)
-    display.setCursor(0, 40);  // Adjust Y as needed
-
+    /* Display communication status */
     if (txStatus == TX_OK) 
     {
         if (blinkOn) 
         {
-            display.println("Com status: OK");  // Show when blink on
+            display.println("Com status: OK");  
         } 
         else 
         {
-            display.println("       ");  // Hide when blink off
+            display.println("       ");  
         }
     } 
     else if (txStatus == TX_FAIL) 
