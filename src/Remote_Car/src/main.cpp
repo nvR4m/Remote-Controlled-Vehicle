@@ -3,12 +3,11 @@
 #include "wifi_control.h"
 #include "ultrasonic_sensor.h"
 
-// ==================== HC-SR04 Pins ====================
 #define TRIG_PIN 13
 #define ECHO_PIN 12
 
 State currentState = STATE_COMM_FAIL;
-HardwareSerial GloveUART(2);  // UART2 on ESP32 (GPIO17 TX, GPIO16 RX usually)
+HardwareSerial VehicleUART(2); 
 bool frontLocked = false;
 
 void printState(State state) {
@@ -25,7 +24,7 @@ void printState(State state) {
 
 void setup() {
     Serial.begin(115200);
-    GloveUART.begin(9600, SERIAL_8N1, -1, 17);
+    VehicleUART.begin(9600, SERIAL_8N1, -1, 17);
 
     ultrasonic_sensor_init(TRIG_PIN, ECHO_PIN);
     wifi_control_init();
@@ -35,8 +34,10 @@ void loop() {
     unsigned long now = millis();
     State newState = currentState;
 
+    /* Get sensor data */
     float distanceCM = ultrasonic_sensor_read_cm();
 
+    /* Decide driving command */
     if (!wifi_control_data_available()) {
         newState = STATE_COMM_FAIL;
     } else {
@@ -53,6 +54,7 @@ void loop() {
 
     }
 
+    /* Compute sensor information */
     if (distanceCM <= 15 && newState == STATE_T2_FRONT)
     {
         newState = STATE_HALT;
@@ -62,10 +64,11 @@ void loop() {
         /* Do nothing */
     }
 
+    /* Send command to Arduino UNO */
     if (newState != currentState) {
         currentState = newState;
         printState(currentState);
-        GloveUART.write((uint8_t)currentState);
+        VehicleUART.write((uint8_t)currentState);
     }
 
     Serial.print("Distance: ");

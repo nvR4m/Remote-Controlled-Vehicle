@@ -4,7 +4,7 @@
 
 static uint8_t receiverMac[6] = {0x3c, 0x8a, 0x1f, 0xd3, 0x3f, 0x40};
 
-// Track last send status globally
+/* Track last send status globally */
 static volatile bool lastSendSuccess = false;
 static volatile bool sendCompleted = false;
 
@@ -22,12 +22,13 @@ void onDataSent(const uint8_t *mac_addr, esp_now_send_status_t status)
         Serial.println("Fail");
         lastSendSuccess = false;
     }
-    sendCompleted = true; // mark send done
+    sendCompleted = true;
 }
 
 /* Initialize WiFi controller*/
 void wifiControlInit() 
 {
+    /* Set the controller in station mode */
     WiFi.mode(WIFI_STA);
     WiFi.disconnect();
 
@@ -37,8 +38,8 @@ void wifiControlInit()
         return;
     }
 
+    /* Initialize ESP-NOW registers */
     esp_now_register_send_cb(onDataSent);
-
     esp_now_peer_info_t peerInfo = {};
     memcpy(peerInfo.peer_addr, receiverMac, 6);
     peerInfo.channel = 0;
